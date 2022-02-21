@@ -27,7 +27,7 @@ class MenuServiceProvider extends ServiceProvider
         Blade::componentNamespace('Dowilcox\\KnpMenu\\Views\\Components', 'knp');
         $this->loadViewsFrom(__DIR__.'/resources/views', 'knp');
 
-        $this->registerMiddleware();
+        $this->registerMiddlewares();
     }
 
     /**
@@ -60,18 +60,12 @@ class MenuServiceProvider extends ServiceProvider
         });
     }
 
-    private function registerMiddleware()
+    private function registerMiddlewares()
     {
         /** @var Router $router */
         $router = $this->app->get(Router::class);
 
         // Add middleware alias
         $router->aliasMiddleware('menu', MenuRegisterer::class);
-
-        // Add middleware menu to the web middleware group
-        $middlewareGroups = $router->getMiddlewareGroups();
-        $webMiddleware = $middlewareGroups['web'] ?? [];
-        $webMiddleware[] = 'menu';
-        $router->middlewareGroup('web', $webMiddleware);
     }
 }

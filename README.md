@@ -53,7 +53,7 @@ Add menu in config:
         \App\Menu\MainMenu::class,
     ],
 ```
-_Menu's are registered in middleware 'menu' (alias). The middleware is already added to the 'web' middleware group. You need to add the middleware 'menu' to routes without the 'web' middleware._
+Add menu middleware (the middleware loads the registered menu's) in `app/Http/kernel.php` or to a specific route.
 
 Call menu in Blade view:
 ```html
