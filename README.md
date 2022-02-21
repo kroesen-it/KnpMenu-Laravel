@@ -5,7 +5,7 @@ Laravel 5 package to create navigation menus, based on [KnpLabs/KnpMenu](https:/
 ### Installation
 Add to your composer.json file
 ```json
-"dowilcox/knp-menu-laravel": "1.0.*"
+"dowilcox/knp-menu-laravel": "2.*"
 ```
 
 ### Register the package
@@ -27,6 +27,7 @@ php artisan vendor:publish
 
 ### Example
 
+#### Create menu
 ```php
 $menu = Menu::create('main-menu', ['childrenAttributes' => ['class' => 'nav']]);
 
@@ -34,8 +35,10 @@ $menu->addChild('Home', ['uri' => url('/')]);
 $menu->addChild('Users', ['uri' => route('admin.users.index')]);
 $menu->addChild('Roles', ['uri' => route('admin.roles.index')]);
 $menu->addChild('Menu', ['uri' => url('menu')]);
-
-echo Menu::render($menu);
+```
+#### Call menu in blade
+```html
+<x-knp::menu name="main-menu" />
 ```
 
 Will output:

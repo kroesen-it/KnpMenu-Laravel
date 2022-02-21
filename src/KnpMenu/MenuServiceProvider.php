@@ -21,6 +21,10 @@ class MenuServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/menu.php' => config_path('menu.php'),
         ]);
+
+
+        Blade::componentNamespace('Dowilcox\\KnpMenu\\Views\\Components', 'knp');
+        $this->loadViewsFrom(__DIR__.'/resources/views', 'knp');
     }
 
     /**
