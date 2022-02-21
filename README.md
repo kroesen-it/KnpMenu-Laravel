@@ -1,6 +1,6 @@
 KnpMenu-Laravel
 ============
-Laravel 5 package to create navigation menus, based on [KnpLabs/KnpMenu](https://github.com/KnpLabs/KnpMenu).
+Laravel 8/9 package to create navigation menus, based on [KnpLabs/KnpMenu](https://github.com/KnpLabs/KnpMenu).
 
 ### Installation
 Add to your composer.json file
@@ -25,23 +25,42 @@ Dowilcox\KnpMenu\MenuServiceProvider::class,
 php artisan vendor:publish
 ```
 
-### Example
+### Usage
 
-#### Create menu
+Create menu
 ```php
-$menu = Menu::create('main-menu', ['childrenAttributes' => ['class' => 'nav']]);
+<?php
 
-$menu->addChild('Home', ['uri' => url('/')]);
-$menu->addChild('Users', ['uri' => route('admin.users.index')]);
-$menu->addChild('Roles', ['uri' => route('admin.roles.index')]);
-$menu->addChild('Menu', ['uri' => url('menu')]);
+namespace App\Menu;
+
+use Dowilcox\KnpMenu\Facades\Menu;
+
+class MainMenu
+{
+
+    public function __invoke()
+    {
+        Menu::create('main-menu', ['childrenAttributes' => ['class' => 'nav']])
+            ->addChild('Home', ['uri' => url('/')])
+            ->addChild('Users', ['uri' => route('admin.users.index')])
+            ->addChild('Roles', ['uri' => route('admin.roles.index')])
+            ->addChild('Menu', ['uri' => url('menu')])
+        ;
+    }
+}
 ```
-#### Call menu in blade
+Add menu in config:
+```php
+    'menu' => [
+        \App\Menu\MainMenu::class,
+    ],
+```
+Call menu in Blade view
 ```html
 <x-knp::menu name="main-menu" />
 ```
 
-Will output:
+This will output:
 ```html
 <ul class="nav">
   <li class="first">

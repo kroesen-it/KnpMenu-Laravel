@@ -2,6 +2,7 @@
 
 namespace Dowilcox\KnpMenu;
 
+use Dowilcox\KnpMenu\Loader\MenuPathLoader;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -22,9 +23,14 @@ class MenuServiceProvider extends ServiceProvider
             __DIR__ . '/../config/menu.php' => config_path('menu.php'),
         ]);
 
-
         Blade::componentNamespace('Dowilcox\\KnpMenu\\Views\\Components', 'knp');
         $this->loadViewsFrom(__DIR__.'/resources/views', 'knp');
+
+        if(is_array(config('menu.menu'))){
+            foreach (config('menu.menu') as $menu){
+                (new $menu)();
+            }
+        }
     }
 
     /**

@@ -20,5 +20,9 @@ return [
         'compressed'        => false,
         'allow_safe_labels' => false,
         'clear_matcher'     => true
-    ]
+    ],
+
+    'menu' => [
+//        \App\Menu\MainMenu::class,
+    ],
 ];
