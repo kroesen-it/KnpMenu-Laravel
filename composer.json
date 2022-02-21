@@ -19,6 +19,16 @@
         {
             "name": "Donald Wilcox",
             "email": "dowilcox@umflint.edu"
+        },
+        {
+            "name": "Alwin Kroesen"
         }
-    ]
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Dowilcox\\KnpMenu\\MenuServiceProvider"
+            ]
+        }
+    }
 }

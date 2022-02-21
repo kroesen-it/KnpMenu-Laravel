@@ -10,14 +10,13 @@ Add to your composer.json file
 
 ### Register the package
 
-In config/app.php add the service provider and alias.
+In config/app.php add the alias
 
 ```php
-Dowilcox\KnpMenu\MenuServiceProvider::class,
-```
-
-```php
-'Menu' => Dowilcox\KnpMenu\Facades\Menu::class,
+'aliases' => [
+    ...
+    'Menu' => Dowilcox\KnpMenu\Facades\Menu::class,
+],
 ```
 
 #### Publish config

@@ -2,7 +2,6 @@
 
 namespace Dowilcox\KnpMenu;
 
-use Dowilcox\KnpMenu\Loader\MenuPathLoader;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
