@@ -1,6 +1,9 @@
-<?php namespace Dowilcox\KnpMenu;
+<?php
+
+namespace Dowilcox\KnpMenu;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Knp\Menu\Matcher\Matcher;
 use Knp\Menu\Matcher\Voter\UriVoter;
@@ -35,9 +38,10 @@ class MenuServiceProvider extends ServiceProvider
 
             $factory = new MenuFactory();
 
-            $matcher = new Matcher();
-            $matcher->addVoter(new UriVoter($url->current()));
-            $matcher->addVoter(new UriVoter($url->full()));
+            $matcher = new Matcher([
+                new UriVoter($url->current()),
+                new UriVoter($url->full())
+            ]);
 
             $renderer = new ListRenderer($matcher);
 

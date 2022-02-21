@@ -1,54 +1,50 @@
 <?php namespace Dowilcox\KnpMenu\Interfaces;
 
 use Knp\Menu\ItemInterface;
+use Knp\Menu\Matcher\MatcherInterface;
+use Knp\Menu\MenuFactory;
+use Knp\Menu\Renderer\ListRenderer;
 
 interface MenuInterface
 {
     /**
-     * Create a new menu.
-     *
-     * @param $name
-     * @param $options
-     * @return mixed
+     * Create a new menu
      */
-    public function create($name, $options = []);
+    public function create(string $name, array $options = []): ItemInterface;
 
     /**
-     * Get a menu by the name.
-     *
-     * @param $name
-     * @return mixed
+     * Get a menu by the name
      */
-    public function get($name);
+    public function get(string $name): ItemInterface;
 
     /**
-     * Render passed menu.
-     *
-     * @param ItemInterface $menu
-     * @param array         $options
-     * @return mixed
+     * Check if menu exists
      */
-    public function render(ItemInterface $menu, $options = []);
+    public function has(string $name): bool;
 
     /**
-     * Get the factory instance.
-     *
-     * @return mixed
+     * Forget a menu
      */
-    public function getFactory();
+    public function forget($name): void;
 
     /**
-     * Get the matcher instance.
-     *
-     * @return mixed
+     * Render passed menu
      */
-    public function getMatcher();
+    public function render(ItemInterface $menu, array $options = []): string;
 
     /**
-     * Get the renderer instance.
-     *
-     * @return mixed
+     * Get the factory instance
      */
-    public function getRenderer();
+    public function getFactory(): MenuFactory;
+
+    /**
+     * Get the matcher instance
+     */
+    public function getMatcher(): MatcherInterface;
+
+    /**
+     * Get the renderer instance
+     */
+    public function getRenderer(): ListRenderer;
 
 }

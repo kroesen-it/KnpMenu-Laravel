@@ -13,37 +13,36 @@ class Menu implements MenuInterface
     /**
      * Default render options.
      *
-     * @var array
      */
-    protected $renderOptions = [];
+    protected array $renderOptions = [];
 
     /**
      * Holds each instance of a menu.
      *
      * @var Collection
      */
-    protected $collection;
+    protected Collection $collection;
 
     /**
      * MenuFactory instance.
      *
      * @var MenuFactory
      */
-    protected $factory;
+    protected MenuFactory $factory;
 
     /**
      * Instance of a Matcher.
      *
      * @var MatcherInterface
      */
-    protected $matcher;
+    protected MatcherInterface $matcher;
 
     /**
      * ListRenderer instance.
      *
      * @var ListRenderer
      */
-    protected $renderer;
+    protected ListRenderer $renderer;
 
     /**
      * Class constructor.
@@ -68,14 +67,7 @@ class Menu implements MenuInterface
         $this->renderer = $renderer;
     }
 
-    /**
-     * Create a new menu.
-     *
-     * @param $name
-     * @param $options
-     * @return mixed
-     */
-    public function create($name, $options = [])
+    public function create(string $name, array $options = []): ItemInterface
     {
         $menu = $this->factory->createItem($name, $options);
         $this->collection->put($name, $menu);
@@ -83,67 +75,39 @@ class Menu implements MenuInterface
         return $menu;
     }
 
-    /**
-     * Get a menu by the name.
-     *
-     * @param $name
-     * @return mixed
-     */
-    public function get($name)
+    public function get($name): ItemInterface
     {
         return $this->collection->get($name);
     }
 
-    /**
-     * Forget a menu
-     *
-     * @param $name
-     */
-    public function forget($name)
+    public function has($name): bool
+    {
+        return $this->collection->has($name);
+    }
+
+    public function forget($name): void
     {
         $this->collection->forget($name);
     }
 
-    /**
-     * Render passed menu.
-     *
-     * @param ItemInterface $menu
-     * @param array         $options
-     * @return mixed
-     */
-    public function render(ItemInterface $menu, $options = [])
+    public function render(ItemInterface $menu, array $options = []): string
     {
         $renderOptions = array_merge($this->renderOptions, $options);
 
         return $this->renderer->render($menu, $renderOptions);
     }
 
-    /**
-     * Get the factory instance.
-     *
-     * @return MenuFactory
-     */
-    public function getFactory()
+    public function getFactory(): MenuFactory
     {
         return $this->factory;
     }
 
-    /**
-     * Get the matcher instance.
-     *
-     * @return MatcherInterface
-     */
-    public function getMatcher()
+    public function getMatcher(): MatcherInterface
     {
         return $this->matcher;
     }
 
-    /**
-     * Get the renderer instance.
-     *
-     * @return ListRenderer
-     */
-    public function getRenderer()
+    public function getRenderer(): ListRenderer
     {
         return $this->renderer;
     }
