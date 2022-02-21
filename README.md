@@ -39,22 +39,23 @@ class MainMenu
 
     public function __invoke()
     {
-        Menu::create('main-menu', ['childrenAttributes' => ['class' => 'nav']])
-            ->addChild('Home', ['uri' => url('/')])
-            ->addChild('Users', ['uri' => route('admin.users.index')])
-            ->addChild('Roles', ['uri' => route('admin.roles.index')])
-            ->addChild('Menu', ['uri' => url('menu')])
-        ;
+        $menu = Menu::create('main-menu', ['childrenAttributes' => ['class' => 'nav']]);
+        $menu->addChild('Home', ['uri' => url('/')]);
+        $menu->addChild('Users', ['uri' => route('admin.users.index')]);
+        $menu->addChild('Roles', ['uri' => route('admin.roles.index')]);
+        $menu->addChild('Menu', ['uri' => url('menu')]);
     }
 }
 ```
-Add menu in config:
+Add menu in config: 
 ```php
     'menu' => [
         \App\Menu\MainMenu::class,
     ],
 ```
-Call menu in Blade view
+_Menu's are registered in middleware 'menu' (alias). The middleware is already added to the 'web' middleware group. You need to add the middleware 'menu' to routes without the 'web' middleware._
+
+Call menu in Blade view:
 ```html
 <x-knp::menu name="main-menu" />
 ```
