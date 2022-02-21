@@ -5,7 +5,7 @@ Laravel 5 package to create navigation menus, based on [KnpLabs/KnpMenu](https:/
 ### Installation
 Add to your composer.json file
 ```json
-"dowilcox/knp-menu-laravel": "2.*"
+"dowilcox/knp-menu-laravel": "^2"
 ```
 
 ### Register the package
