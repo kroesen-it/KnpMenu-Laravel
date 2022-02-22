@@ -25,6 +25,7 @@ class BootstrapRenderer extends BaseListRenderer
         $html .= "<span class='navbar-toggler-icon'></span>\n";
         $html .= "</button>\n";
 
+        $html .= $this->renderText($item, true);
 
         $html .= "<div class='collapse navbar-collapse' id='$uniqueId'>\n";
         $attributes = $item->getChildrenAttributes();
