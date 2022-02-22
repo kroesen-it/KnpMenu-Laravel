@@ -77,3 +77,22 @@ This will output:
   </li>
 </ul>
 ```
+### Configuration
+You can change the renderer in the config:
+```php
+return [
+    ...
+    'renderer' => \Knp\Menu\Renderer\ListRenderer::class,
+];
+```
+Or when creating the menu:
+```php
+$menu = Menu::create('main-menu',[], \Knp\Menu\Renderer\ListRenderer::class);
+```
+
+#### Renderers
+* Bootstrap navbar v5: 
+  * <code>[Dowilcox\KnpMenu\Renderer\BootstrapRenderer](src/KnpMenu/Renderer/BootstrapRenderer.php)</code>
+* ListRenderer (default): 
+  * <code>\Knp\Menu\Renderer\ListRenderer</code>
+* Create your own

@@ -11,6 +11,7 @@ use Knp\Menu\Matcher\Matcher;
 use Knp\Menu\Matcher\Voter\UriVoter;
 use Knp\Menu\MenuFactory;
 use Knp\Menu\Renderer\ListRenderer;
+use Knp\Menu\Renderer\RendererInterface;
 
 class MenuServiceProvider extends ServiceProvider
 {
@@ -39,6 +40,8 @@ class MenuServiceProvider extends ServiceProvider
 
         $this->app->singleton('menu', function ($app) {
             $renderOptions = $app['config']['menu.render'];
+            $renderer = $app['config']['menu.renderer'];
+
             $url = $app['url'];
 
             $collection = new Collection();
@@ -50,7 +53,11 @@ class MenuServiceProvider extends ServiceProvider
                 new UriVoter($url->full())
             ]);
 
-            $renderer = new ListRenderer($matcher);
+            if(class_exists($renderer) && is_subclass_of($renderer, RendererInterface::class)){
+                $renderer = new $renderer($matcher);
+            }else{
+                $renderer = new ListRenderer($matcher);
+            }
 
             return new Menu($renderOptions, $collection, $factory, $matcher, $renderer);
         });

@@ -8,7 +8,7 @@ use Knp\Menu\MenuItem;
 use Knp\Menu\Renderer\ListRenderer;
 
 /**
- * @method MenuItem create(string $name, array $options = [])
+ * @method MenuItem create(string $name, array $options = [], ?string $renderer = null)
  * @method ItemInterface get(string $name)
  * @method bool has(string $name)
  * @method void forget($name)

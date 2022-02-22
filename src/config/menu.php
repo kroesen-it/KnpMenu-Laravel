@@ -25,4 +25,6 @@ return [
     'menu' => [
 //        \App\Menu\MainMenu::class,
     ],
+
+    'renderer' => \Knp\Menu\Renderer\ListRenderer::class,
 ];

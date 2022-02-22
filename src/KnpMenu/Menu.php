@@ -6,6 +6,7 @@ use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\MatcherInterface;
 use Knp\Menu\MenuFactory;
 use Knp\Menu\Renderer\ListRenderer;
+use Knp\Menu\Renderer\RendererInterface;
 
 class Menu implements MenuInterface
 {
@@ -67,8 +68,11 @@ class Menu implements MenuInterface
         $this->renderer = $renderer;
     }
 
-    public function create(string $name, array $options = []): ItemInterface
+    public function create(string $name, array $options = [], ?string $renderer = null): ItemInterface
     {
+        if(is_subclass_of($renderer, RendererInterface::class)){
+            $this->renderer = new $renderer($this->matcher);
+        }
         $menu = $this->factory->createItem($name, $options);
         $this->collection->put($name, $menu);
 

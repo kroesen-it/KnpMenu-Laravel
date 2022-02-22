@@ -10,7 +10,7 @@ interface MenuInterface
     /**
      * Create a new menu
      */
-    public function create(string $name, array $options = []): ItemInterface;
+    public function create(string $name, array $options = [], ?string $renderer = null): ItemInterface;
 
     /**
      * Get a menu by the name
