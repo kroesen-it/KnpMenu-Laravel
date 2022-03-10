@@ -8,21 +8,22 @@ use Knp\Menu\Renderer\ListRenderer as BaseListRenderer;
 class BootstrapRenderer extends BaseListRenderer
 {
 
-
     public function render(ItemInterface $item, array $options = []): string
     {
-        $options = \array_merge($this->defaultOptions, $options);
+        $options = array_merge($this->defaultOptions, $options);
 
-        $item->setAttribute('class', 'navbar ' . $item->getAttribute('class') ?? '');
+        $class = explode(' ', $item->getAttribute('class') ?? '');
+        $class[] = 'navbar';
+        $item->setAttribute('class', implode(' ', array_unique($class)));
 
         $html = "<nav {$this->renderHtmlAttributes($item->getAttributes())}>";
 
         $html .= $this->renderBrand($item);
 
-        $uniqueId = substr(md5(mt_rand()), 0, 7);
+        $uniqueId = $this->generateRandomString();
 
-        $html .= "<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#$uniqueId' aria-controls='$uniqueId' aria-expanded='false' aria-label='Toggle navigation'>\n";
-        $html .= "<span class='navbar-toggler-icon'></span>\n";
+        $html .= "<button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#$uniqueId' aria-controls='$uniqueId' aria-expanded='false' aria-label='Toggle navigation'>\n";
+        $html .= "    <span class='navbar-toggler-icon'></span>\n";
         $html .= "</button>\n";
 
         $html .= $this->renderText($item, true);
@@ -108,10 +109,14 @@ class BootstrapRenderer extends BaseListRenderer
             $class[] = $options['leaf_class'];
         }
 
+        if($item->hasChildren()){
+            $class[] = 'dropdown';
+        }
+
         // retrieve the attributes and put the final class string back on it
         $attributes = $item->getAttributes();
         if (!empty($class)) {
-            $attributes['class'] = \implode(' ', $class);
+            $attributes['class'] = implode(' ', array_unique($class));
         }
 
 
@@ -120,15 +125,20 @@ class BootstrapRenderer extends BaseListRenderer
 
         // render the text/link inside the li tag
         //$html .= $this->format($item->getUri() ? $item->renderLink() : $item->renderLabel(), 'link', $item->getLevel());
-        $html .= $this->renderLink($item, $options);
-        $html .= $this->renderElement($item, $options);
+        if($item->getName() === 'divider'){
+            $html .= $this->renderDivider($item, $options);
+        }else{
+            $this->handleDropdown($item);
+            $html .= $this->renderLink($item, $options);
+            $html .= $this->renderElement($item, $options);
+        }
 
         // renders the embedded ul
         $childrenClass = (array) $item->getChildrenAttribute('class');
         $childrenClass[] = 'menu_level_'.$item->getLevel();
 
         $childrenAttributes = $item->getChildrenAttributes();
-        $childrenAttributes['class'] = \implode(' ', $childrenClass);
+        $childrenAttributes['class'] = implode(' ', $childrenClass);
 
         $html .= $this->renderList($item, $childrenAttributes, $options);
 
@@ -147,11 +157,21 @@ class BootstrapRenderer extends BaseListRenderer
      */
     protected function renderLinkElement(ItemInterface $item, array $options): string
     {
-        \assert(null !== $item->getUri());
+        assert(null !== $item->getUri());
 
         $attributes = $item->getLinkAttributes();
-        $attributes['class'] = ($attributes['class'] ?? '') . ' nav-link';
-        return \sprintf('<a href="%s"%s>%s</a>', $this->escape($item->getUri()), $this->renderHtmlAttributes($attributes), $this->renderLabel($item, $options));
+
+        $class = explode(' ', $attributes['class'] ?? '');
+
+        if($item->getParent()->getParent() !== null){
+            $class[] = 'dropdown-item';
+        }else{
+            $class[] = 'nav-link';
+        }
+        $attributes['class'] = implode(' ', array_unique($class));
+
+
+        return sprintf('<a href="%s"%s>%s</a>', $this->escape($item->getUri()), $this->renderHtmlAttributes($attributes), $this->renderLabel($item, $options));
     }
 
     protected function renderElement(ItemInterface $item, array $options): string
@@ -164,6 +184,16 @@ class BootstrapRenderer extends BaseListRenderer
         return $this->format($text, 'link', $item->getLevel(), $options);
     }
 
+    protected function renderDivider(ItemInterface $item, array $options): string
+    {
+        $attributes = $item->getLinkAttributes();
+        $class = explode(' ', $attributes['class'] ?? '');
+        $class[] = 'dropdown-divider';
+        $attributes['class'] = implode(' ', array_unique($class));
+
+        return $this->format(sprintf('<hr %s/>', $this->renderHtmlAttributes($attributes)), 'link', $item->getLevel(), $options);
+    }
+
     protected function renderBrand(ItemInterface $item): string
     {
         $label = $item->getAttribute('brand') ?? null;
@@ -172,7 +202,7 @@ class BootstrapRenderer extends BaseListRenderer
             return "<div class='navbar-brand'><img src='{$item->getAttribute('image')}' alt='$alt'/></div>\n";
         }
         if($label){
-            return "<div class='navbar-brand'>{$label}</div>\n";
+            return "<div class='navbar-brand'>$label</div>\n";
         }
         return '';
     }
@@ -186,6 +216,45 @@ class BootstrapRenderer extends BaseListRenderer
 
         return "<span class='navbar-text'>{$item->getExtra($type)}</span>";
 
+    }
+
+    protected function handleDropdown(ItemInterface $item)
+    {
+        if(!$item->hasChildren()){
+            return;
+        }
+        $item->setUri('#');
+        $class = explode(' ', $item->getLinkAttribute('class') ?? '');
+        $class[] = 'dropdown-toggle';
+        $item->setLinkAttribute('class', implode(' ', array_unique($class)));
+
+        if(!$item->getLinkAttribute('role')){
+            $item->setLinkAttribute('role', 'button');
+        }
+        if(!$item->getLinkAttribute('id')){
+            $item->setLinkAttribute('id', $this->generateRandomString());
+        }
+
+        if(!$item->getLinkAttribute('data-bs-toggle')){
+            $item->setLinkAttribute('data-bs-toggle', 'dropdown');
+        }
+
+        if(!$item->getLinkAttribute('aria-expanded')){
+            $item->setLinkAttribute('aria-expanded', 'false');
+        }
+
+        $class = explode(' ', $item->getChildrenAttribute('class') ?? '');
+        $class[] = 'dropdown-menu';
+        $item->setChildrenAttribute('class', implode(' ', array_unique($class)));
+
+        if(!$item->getChildrenAttribute('aria-labelledby')){
+            $item->setChildrenAttribute('aria-labelledby', $item->getLinkAttribute('id'));
+        }
+    }
+
+    protected function generateRandomString($length = 10): string
+    {
+        return substr(str_shuffle(str_repeat($x='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
     }
 
 }
