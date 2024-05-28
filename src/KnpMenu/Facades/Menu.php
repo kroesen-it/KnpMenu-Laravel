@@ -1,5 +1,6 @@
 <?php namespace Dowilcox\KnpMenu\Facades;
 
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Facade;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\MatcherInterface;
@@ -12,7 +13,7 @@ use Knp\Menu\Renderer\ListRenderer;
  * @method ItemInterface get(string $name)
  * @method bool has(string $name)
  * @method void forget($name)
- * @method string render(ItemInterface $menu, array $options = [])
+ * @method Htmlable render(ItemInterface $menu, array $options = [])
  * @method MenuFactory getFactory()
  * @method MatcherInterface getMatcher()
  * @method ListRenderer getRenderer()

@@ -1,7 +1,9 @@
 <?php namespace Dowilcox\KnpMenu;
 
 use Dowilcox\KnpMenu\Interfaces\MenuInterface;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\HtmlString;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\MatcherInterface;
 use Knp\Menu\MenuFactory;
@@ -94,11 +96,11 @@ class Menu implements MenuInterface
         $this->collection->forget($name);
     }
 
-    public function render(ItemInterface $menu, array $options = []): string
+    public function render(ItemInterface $menu, array $options = []): Htmlable
     {
         $renderOptions = array_merge($this->renderOptions, $options);
 
-        return $this->renderer->render($menu, $renderOptions);
+        return new HtmlString($this->renderer->render($menu, $renderOptions));
     }
 
     public function getFactory(): MenuFactory

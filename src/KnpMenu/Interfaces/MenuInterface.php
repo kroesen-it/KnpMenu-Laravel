@@ -1,5 +1,6 @@
 <?php namespace Dowilcox\KnpMenu\Interfaces;
 
+use Illuminate\Contracts\Support\Htmlable;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\MatcherInterface;
 use Knp\Menu\MenuFactory;
@@ -30,7 +31,7 @@ interface MenuInterface
     /**
      * Render passed menu
      */
-    public function render(ItemInterface $menu, array $options = []): string;
+    public function render(ItemInterface $menu, array $options = []): Htmlable;
 
     /**
      * Get the factory instance
