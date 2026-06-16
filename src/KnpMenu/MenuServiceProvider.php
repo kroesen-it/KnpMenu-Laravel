@@ -26,7 +26,7 @@ class MenuServiceProvider extends ServiceProvider
         ]);
 
         Blade::componentNamespace('Dowilcox\\KnpMenu\\Views\\Components', 'knp');
-        $this->loadViewsFrom(__DIR__.'/resources/views', 'knp');
+//        $this->loadViewsFrom(__DIR__.'/resources/views', 'knp');
 
         $this->registerMiddlewares();
     }
